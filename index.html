@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab Meeting Schedule</title>
+<style>
+:root {
+  --bg:      #f1f5f9;
+  --card:    #ffffff;
+  --nav:     #1e293b;
+  --text:    #1e293b;
+  --sub:     #64748b;
+  --border:  #e2e8f0;
+
+  --wed1:  #2563eb; --wed1-l: #dbeafe; --wed1-d: #1d4ed8;
+  --wed2:  #0d9488; --wed2-l: #ccfbf1; --wed2-d: #0f766e;
+  --thu1:  #d97706; --thu1-l: #fef3c7; --thu1-d: #b45309;
+  --thu2:  #7c3aed; --thu2-l: #ede9fe; --thu2-d: #6d28d9;
+  --hol:   #dc2626; --hol-l:  #fee2e2;
+  --now:   #0ea5e9;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ===== NAV ===== */
+.nav { background: var(--nav); position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+.nav-inner { max-width: 920px; margin: 0 auto; display: flex; align-items: center; padding: 0 16px; height: 54px; gap: 4px; }
+.nav-brand { font-size: 15px; font-weight: 700; color: #f8fafc; white-space: nowrap; margin-right: 12px; }
+.nav-tab { background: none; border: none; color: #94a3b8; font-size: 13px; font-weight: 600; padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: background .15s, color .15s; white-space: nowrap; }
+.nav-tab:hover { background: rgba(255,255,255,.1); color: #f1f5f9; }
+.nav-tab.active { background: rgba(255,255,255,.18); color: #f8fafc; }
+
+/* ===== PAGES ===== */
+.page { display: none; }
+.page.active { display: block; }
+.container { max-width: 920px; margin: 0 auto; padding: 24px 16px; }
+
+/* ===== UTIL ===== */
+.mt8  { margin-top:  8px; }
+.mt16 { margin-top: 16px; }
+.mt24 { margin-top: 24px; }
+.row  { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.sec-title { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--sub); margin-bottom: 12px; }
+.empty { text-align: center; padding: 48px 20px; color: var(--sub); font-size: 14px; }
+
+/* ===== BADGE ===== */
+.badge { display: inline-block; padding: 2px 9px; border-radius: 100px; font-size: 11px; font-weight: 700; letter-spacing: .04em; white-space: nowrap; }
+.b-Wed1 { background: var(--wed1-l); color: var(--wed1-d); }
+.b-Wed2 { background: var(--wed2-l); color: var(--wed2-d); }
+.b-Thu1 { background: var(--thu1-l); color: var(--thu1-d); }
+.b-Thu2 { background: var(--thu2-l); color: var(--thu2-d); }
+.b-hol  { background: var(--hol-l);  color: var(--hol); }
+.now-badge { background: var(--now); color: #fff; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 4px; letter-spacing: .06em; text-transform: uppercase; flex-shrink: 0; }
+
+/* ===== HOME ===== */
+.week-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+.week-label { font-size: 15px; font-weight: 700; }
+.week-sub   { font-size: 13px; color: var(--sub); margin-left: auto; }
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 540px) { .cards { grid-template-columns: 1fr; } }
+
+.mcard { background: var(--card); border-radius: 12px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,.08); border-top: 4px solid var(--border); }
+.mcard.cWed1 { border-top-color: var(--wed1); }
+.mcard.cWed2 { border-top-color: var(--wed2); }
+.mcard.cThu1 { border-top-color: var(--thu1); }
+.mcard.cThu2 { border-top-color: var(--thu2); }
+.mcard.cHol  { border-top-color: var(--hol); background: var(--hol-l); }
+.mcard.cNone { border-top-color: var(--border); background: #f8fafc; }
+
+.mcard-day   { font-size: 12px; color: var(--sub); margin-bottom: 4px; }
+.mcard-name  { font-size: 24px; font-weight: 800; margin-bottom: 14px; }
+.mcard.cWed1 .mcard-name { color: var(--wed1); }
+.mcard.cWed2 .mcard-name { color: var(--wed2); }
+.mcard.cThu1 .mcard-name { color: var(--thu1); }
+.mcard.cThu2 .mcard-name { color: var(--thu2); }
+.mcard.cHol  .mcard-name { color: var(--hol); }
+.mcard.cNone .mcard-name { color: #9ca3af; }
+
+.mlist { display: flex; flex-direction: column; gap: 5px; }
+.mitem { font-size: 13px; display: flex; align-items: center; gap: 7px; }
+.mitem::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
+
+.upcoming-box { background: var(--card); border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,.07); overflow: hidden; }
+.up-row { display: flex; align-items: center; padding: 11px 16px; border-bottom: 1px solid var(--border); gap: 10px; }
+.up-row:last-child { border-bottom: none; }
+.up-row.past { opacity: .45; }
+.up-row.hol  { background: #fef2f2; }
+.up-date  { font-size: 13px; font-weight: 600; min-width: 110px; flex-shrink: 0; }
+.up-mbrs  { font-size: 12px; color: var(--sub); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ===== SCHEDULE ===== */
+.sched-stats { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+.sched-stat  { font-size: 13px; color: var(--sub); }
+.sched-stat strong { color: var(--text); font-size: 15px; }
+.jump-btn { margin-left: auto; }
+
+.wk-block { margin-bottom: 18px; }
+.wk-hd    { display: flex; align-items: center; gap: 8px; padding: 6px 0; margin-bottom: 6px; }
+.wk-hd-label { font-size: 12px; font-weight: 700; color: var(--sub); }
+.wk-hd.is-now .wk-hd-label { color: var(--now); }
+
+.sched-box { background: var(--card); border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,.06); overflow: hidden; }
+.sched-row { display: flex; align-items: center; padding: 11px 16px; border-bottom: 1px solid var(--border); gap: 12px; }
+.sched-row:last-child { border-bottom: none; }
+.sched-row.is-now { background: #eff6ff; }
+.sched-row.is-past .sched-date, .sched-row.is-past .sched-mbrs { opacity: .4; }
+.sched-date { font-size: 13px; font-weight: 600; min-width: 120px; flex-shrink: 0; }
+.sched-mbrs { font-size: 12px; color: var(--sub); flex: 1; }
+
+/* ===== HOLIDAYS ===== */
+.form-card { background: var(--card); border-radius: 12px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,.07); }
+.form-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 14px; }
+.fgrp  { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 130px; }
+.fgrp label { font-size: 12px; font-weight: 600; color: var(--sub); }
+.fgrp input, .fgrp select {
+  padding: 9px 11px; border: 1.5px solid var(--border); border-radius: 8px;
+  font-size: 14px; font-family: inherit; outline: none; background: #f8fafc;
+  transition: border-color .2s;
+}
+.fgrp input:focus, .fgrp select:focus { border-color: var(--wed1); background: #fff; }
+
+.hol-box { background: var(--card); border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,.07); overflow: hidden; }
+.hol-row { display: flex; align-items: center; padding: 11px 16px; border-bottom: 1px solid var(--border); gap: 12px; }
+.hol-row:last-child { border-bottom: none; }
+.hol-date { font-size: 13px; font-weight: 600; min-width: 120px; flex-shrink: 0; }
+.hol-name { font-size: 13px; color: var(--sub); flex: 1; }
+
+/* ===== SETTINGS ===== */
+.set-sec { background: var(--card); border-radius: 12px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,.07); margin-bottom: 14px; }
+.set-sec h3 { font-size: 14px; font-weight: 700; padding-bottom: 12px; margin-bottom: 14px; border-bottom: 1px solid var(--border); }
+.grp-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+.grp-row:last-child { border-bottom: none; }
+.grp-mbrs { font-size: 13px; color: var(--sub); flex: 1; }
+
+/* ===== BUTTONS ===== */
+.btn { padding: 9px 18px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .15s; white-space: nowrap; }
+.btn:active { transform: scale(.97); }
+.btn-primary  { background: var(--wed1); color: #fff; }
+.btn-primary:hover  { background: var(--wed1-d); }
+.btn-success  { background: #059669; color: #fff; }
+.btn-success:hover  { background: #047857; }
+.btn-sec      { background: var(--border); color: var(--text); }
+.btn-sec:hover      { background: #cbd5e1; }
+.btn-danger   { background: var(--hol); color: #fff; }
+.btn-danger:hover   { background: #b91c1c; }
+.btn-del { background: none; border: 1px solid #fecaca; color: var(--hol); padding: 4px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; transition: background .15s; flex-shrink: 0; }
+.btn-del:hover { background: var(--hol-l); }
+.btn-sm { padding: 6px 12px; font-size: 12px; }
+
+/* ===== TOAST ===== */
+#toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--nav); color: #fff; padding: 10px 22px; border-radius: 100px; font-size: 13px; font-weight: 600; opacity: 0; transition: all .3s; z-index: 200; pointer-events: none; white-space: nowrap; }
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+@media (max-width: 640px) {
+  .nav-brand { display: none; }
+  .nav-tab { padding: 6px 10px; flex: 1; text-align: center; }
+  .container { padding: 16px 12px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-brand">&#128197; Lab Meeting</div>
+    <button class="nav-tab active" data-page="home">Home</button>
+    <button class="nav-tab" data-page="schedule">Schedule</button>
+    <button class="nav-tab" data-page="holidays">Holidays</button>
+    <button class="nav-tab" data-page="settings">Settings</button>
+  </div>
+</nav>
+
+<div id="page-home"     class="page active"><div class="container" id="home-content"></div></div>
+<div id="page-schedule" class="page">       <div class="container" id="sched-content"></div></div>
+<div id="page-holidays" class="page">       <div class="container" id="hol-content"></div></div>
+<div id="page-settings" class="page">       <div class="container" id="set-content"></div></div>
+
+<div id="toast"></div>
+
+<script>
+// ─── CONSTANTS ───────────────────────────────────────────────────────────────
+const STORE = 'labmeeting_v2';
+
+const GROUPS = {
+  Wed1: { members: ['Kosaka','Satoh','Uchino','Horie','Hakim'],           dayNum: 3, cls: 'cWed1' },
+  Wed2: { members: ['Kunitoh','Kominami','Kurosaki','Onishi','Hatsuda'],  dayNum: 3, cls: 'cWed2' },
+  Thu1: { members: ['Nishizawa','Kusumi','Nawar','Todoriki','Ohata'],     dayNum: 4, cls: 'cThu1' },
+  Thu2: { members: ['Kobayashi','Tuchihashi','Zeng','Yamashita','Okumura'], dayNum: 4, cls: 'cThu2' },
+};
+
+const DEFAULT_SETTINGS = {
+  yearStart:     '2025-04-01',
+  yearEnd:       '2026-03-31',
+  wedStartGroup: 'Wed1',
+  thuStartGroup: 'Thu1',
+};
+
+// Japanese national holidays for FY2025 (April 2025 – March 2026)
+const DEFAULT_HOLIDAYS = [
+  { date: '2025-04-29', name: 'Showa Day' },
+  { date: '2025-05-03', name: 'Constitution Day' },
+  { date: '2025-05-04', name: 'Greenery Day' },
+  { date: '2025-05-05', name: "Children's Day" },
+  { date: '2025-05-06', name: 'Substitute Holiday' },
+  { date: '2025-07-21', name: 'Marine Day' },
+  { date: '2025-08-11', name: 'Mountain Day' },
+  { date: '2025-09-15', name: 'Respect for the Aged Day' },
+  { date: '2025-09-23', name: 'Autumnal Equinox Day' },
+  { date: '2025-10-13', name: 'Sports Day' },
+  { date: '2025-11-03', name: 'Culture Day' },
+  { date: '2025-11-23', name: 'Labor Thanksgiving Day' },
+  { date: '2025-11-24', name: 'Substitute Holiday' },
+  { date: '2026-01-01', name: "New Year's Day" },
+  { date: '2026-01-02', name: "New Year Holiday" },
+  { date: '2026-01-12', name: 'Coming of Age Day' },
+  { date: '2026-02-11', name: 'National Foundation Day' },
+  { date: '2026-02-23', name: "Emperor's Birthday" },
+  { date: '2026-03-20', name: 'Vernal Equinox Day' },
+];
+
+// ─── DATA ────────────────────────────────────────────────────────────────────
+function loadData() {
+  try {
+    const s = localStorage.getItem(STORE);
+    if (s) return JSON.parse(s);
+  } catch {}
+  return { settings: { ...DEFAULT_SETTINGS }, holidays: DEFAULT_HOLIDAYS.map(h => ({ ...h })) };
+}
+function saveData() { localStorage.setItem(STORE, JSON.stringify(app)); }
+
+let app = loadData();
+
+// ─── DATE UTILS ──────────────────────────────────────────────────────────────
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+function parseDate(s) {
+  const [y, m, d] = s.split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
+function toStr(d) {
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+}
+function pad(n) { return String(n).padStart(2,'0'); }
+
+function fmtDate(s) {
+  const d = parseDate(s);
+  return `${MON[d.getMonth()]} ${d.getDate()} (${DOW[d.getDay()]})`;
+}
+function fmtWeekRange(mon) {
+  const sun = new Date(mon); sun.setDate(sun.getDate() + 6);
+  const ms = `${MON[mon.getMonth()]} ${mon.getDate()}`;
+  if (mon.getMonth() === sun.getMonth())
+    return `${ms}–${sun.getDate()}, ${mon.getFullYear()}`;
+  return `${ms} – ${MON[sun.getMonth()]} ${sun.getDate()}, ${mon.getFullYear()}`;
+}
+function monday(d) {
+  const r = new Date(d); r.setHours(0,0,0,0);
+  const dw = r.getDay();
+  r.setDate(r.getDate() + (dw === 0 ? -6 : 1 - dw));
+  return r;
+}
+function addDays(d, n) { const r = new Date(d); r.setDate(r.getDate() + n); return r; }
+function today0() { const d = new Date(); d.setHours(0,0,0,0); return d; }
+
+// ─── SCHEDULE GENERATION ─────────────────────────────────────────────────────
+function genSchedule() {
+  const { yearStart, yearEnd, wedStartGroup, thuStartGroup } = app.settings;
+  if (!yearStart || !yearEnd) return [];
+
+  const holMap = {};
+  app.holidays.forEach(h => holMap[h.date] = h.name);
+
+  const start = parseDate(yearStart);
+  const end   = parseDate(yearEnd);
+  const events = [];
+
+  function genDay(targetDow, seq) {
+    let d = new Date(start);
+    while (d.getDay() !== targetDow) d.setDate(d.getDate() + 1);
+    let idx = 0;
+    while (d <= end) {
+      const ds = toStr(d);
+      if (holMap[ds]) {
+        events.push({ date: ds, type: 'holiday', group: null, reason: holMap[ds] });
+      } else {
+        events.push({ date: ds, type: 'meeting', group: seq[idx % 2] });
+        idx++;
+      }
+      d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 7);
+    }
+  }
+
+  const wedSeq = wedStartGroup === 'Wed1' ? ['Wed1','Wed2'] : ['Wed2','Wed1'];
+  const thuSeq = thuStartGroup === 'Thu1' ? ['Thu1','Thu2'] : ['Thu2','Thu1'];
+  genDay(3, wedSeq);
+  genDay(4, thuSeq);
+
+  events.sort((a,b) => a.date.localeCompare(b.date));
+  return events;
+}
+
+function weekEvents(events, mon) {
+  const s = toStr(mon), e = toStr(addDays(mon, 6));
+  return events.filter(ev => ev.date >= s && ev.date <= e);
+}
+
+function byWeek(events) {
+  const map = new Map();
+  events.forEach(ev => {
+    const m = monday(parseDate(ev.date));
+    const k = toStr(m);
+    if (!map.has(k)) map.set(k, { mon: m, events: [] });
+    map.get(k).events.push(ev);
+  });
+  return [...map.values()].sort((a,b) => toStr(a.mon).localeCompare(toStr(b.mon)));
+}
+
+// ─── RENDER HELPERS ──────────────────────────────────────────────────────────
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function badge(group) {
+  if (!group) return `<span class="badge b-hol">Holiday</span>`;
+  return `<span class="badge b-${group}">${group}</span>`;
+}
+
+// ─── HOME PAGE ───────────────────────────────────────────────────────────────
+function renderHome() {
+  const sched = genSchedule();
+  const today = today0();
+  const thisMon = monday(today);
+  const nextMon = addDays(thisMon, 7);
+  const afterNextMon = addDays(nextMon, 7);
+
+  const upcoming = sched.filter(ev => ev.date >= toStr(afterNextMon)).slice(0, 10);
+
+  document.getElementById('home-content').innerHTML = `
+    ${renderWeekSection(sched, thisMon, true)}
+    <div class="mt24"></div>
+    ${renderWeekSection(sched, nextMon, false)}
+    ${upcoming.length ? `
+    <div class="mt24">
+      <div class="sec-title">Upcoming</div>
+      <div class="upcoming-box">
+        ${upcoming.map(ev => `
+          <div class="up-row ${ev.type === 'holiday' ? 'hol' : ''}">
+            <div class="up-date">${fmtDate(ev.date)}</div>
+            ${badge(ev.group)}
+            <div class="up-mbrs">${ev.type === 'meeting' ? GROUPS[ev.group].members.join(' · ') : esc(ev.reason)}</div>
+          </div>`).join('')}
+      </div>
+    </div>` : ''}
+  `;
+}
+
+function renderWeekSection(sched, mon, isThisWeek) {
+  const evs  = weekEvents(sched, mon);
+  const wedEv = evs.find(e => parseDate(e.date).getDay() === 3);
+  const thuEv = evs.find(e => parseDate(e.date).getDay() === 4);
+
+  return `
+    <div>
+      <div class="week-header">
+        ${isThisWeek ? '<span class="now-badge">This Week</span>' : ''}
+        <span class="week-label">${isThisWeek ? '' : 'Next Week — '}${fmtWeekRange(mon)}</span>
+      </div>
+      <div class="cards">
+        ${meetingCard(wedEv, 'Wednesday')}
+        ${meetingCard(thuEv, 'Thursday')}
+      </div>
+    </div>`;
+}
+
+function meetingCard(ev, dayName) {
+  if (!ev) return `
+    <div class="mcard cNone">
+      <div class="mcard-day">${dayName}</div>
+      <div class="mcard-name">—</div>
+      <div style="font-size:12px;color:#9ca3af">Outside schedule range</div>
+    </div>`;
+
+  if (ev.type === 'holiday') return `
+    <div class="mcard cHol">
+      <div class="mcard-day">${fmtDate(ev.date)} · ${dayName}</div>
+      <div class="mcard-name">Holiday</div>
+      <div style="font-size:13px;color:var(--hol)">${esc(ev.reason)}</div>
+      <div style="font-size:12px;color:#9ca3af;margin-top:8px">No meeting this week</div>
+    </div>`;
+
+  const g = GROUPS[ev.group];
+  return `
+    <div class="mcard ${g.cls}">
+      <div class="mcard-day">${fmtDate(ev.date)} · ${dayName}</div>
+      <div class="mcard-name">${ev.group}</div>
+      <div class="mlist">${g.members.map(m => `<div class="mitem">${m}</div>`).join('')}</div>
+    </div>`;
+}
+
+// ─── SCHEDULE PAGE ───────────────────────────────────────────────────────────
+function renderSchedule() {
+  const sched = genSchedule();
+  const today = today0();
+  const thisMon = monday(today);
+  const thisMStr = toStr(thisMon);
+  const todayStr = toStr(today);
+
+  if (!sched.length) {
+    document.getElementById('sched-content').innerHTML = `<div class="empty">No schedule. Configure settings first.</div>`;
+    return;
+  }
+
+  const total     = sched.filter(e => e.type === 'meeting').length;
+  const remaining = sched.filter(e => e.type === 'meeting' && e.date >= todayStr).length;
+  const weeks = byWeek(sched);
+
+  let html = `
+    <div class="sched-stats row">
+      <div class="sched-stat"><strong>${total}</strong> meetings total</div>
+      <div class="sched-stat"><strong>${total - remaining}</strong> completed</div>
+      <div class="sched-stat"><strong>${remaining}</strong> remaining</div>
+      <button class="btn btn-sec btn-sm jump-btn" onclick="jumpToNow()">Jump to Today</button>
+    </div>`;
+
+  weeks.forEach(wk => {
+    const wkStr  = toStr(wk.mon);
+    const isNow  = wkStr === thisMStr;
+    const isPast = wkStr < thisMStr;
+
+    html += `
+      <div class="wk-block" id="wk-${wkStr}">
+        <div class="wk-hd ${isNow ? 'is-now' : ''}">
+          ${isNow ? '<span class="now-badge">Now</span>' : ''}
+          <span class="wk-hd-label">${fmtWeekRange(wk.mon)}</span>
+        </div>
+        <div class="sched-box">
+          ${wk.events.map(ev => schedRow(ev, isNow, isPast)).join('')}
+        </div>
+      </div>`;
+  });
+
+  document.getElementById('sched-content').innerHTML = html;
+}
+
+function schedRow(ev, isNow, isPast) {
+  const dt = `<div class="sched-date">${fmtDate(ev.date)}</div>`;
+  if (ev.type === 'holiday') return `
+    <div class="sched-row ${isPast ? 'is-past' : ''}">
+      ${dt}
+      ${badge(null)}
+      <div class="sched-mbrs">${esc(ev.reason)}</div>
+    </div>`;
+  return `
+    <div class="sched-row ${isNow ? 'is-now' : ''} ${isPast ? 'is-past' : ''}">
+      ${dt}
+      ${badge(ev.group)}
+      <div class="sched-mbrs">${GROUPS[ev.group].members.join(' · ')}</div>
+    </div>`;
+}
+
+function jumpToNow() {
+  const thisMStr = toStr(monday(today0()));
+  const el = document.getElementById(`wk-${thisMStr}`);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ─── HOLIDAYS PAGE ───────────────────────────────────────────────────────────
+function renderHolidays() {
+  const sorted = [...app.holidays].sort((a,b) => a.date.localeCompare(b.date));
+  document.getElementById('hol-content').innerHTML = `
+    <div class="form-card">
+      <h3>Add Holiday / Professor Absent</h3>
+      <div class="row">
+        <div class="fgrp"><label>Date</label><input type="date" id="hDate"></div>
+        <div class="fgrp"><label>Reason</label><input type="text" id="hName" autocomplete="off" placeholder="e.g. National Holiday, Prof. Absent"></div>
+        <div style="display:flex;align-items:flex-end">
+          <button class="btn btn-primary" onclick="addHoliday()">Add</button>
+        </div>
+      </div>
+    </div>
+    <div class="mt16">
+      <div class="sec-title">${sorted.length} entries</div>
+      ${sorted.length === 0
+        ? `<div class="empty">No entries yet.</div>`
+        : `<div class="hol-box">
+            ${sorted.map(h => `
+              <div class="hol-row">
+                <div class="hol-date">${fmtDate(h.date)}</div>
+                <div class="hol-name">${esc(h.name)}</div>
+                <button class="btn-del" onclick="delHoliday('${h.date}')">Remove</button>
+              </div>`).join('')}
+           </div>`}
+    </div>`;
+}
+
+function addHoliday() {
+  const date = document.getElementById('hDate').value;
+  const name = document.getElementById('hName').value.trim();
+  if (!date) { toast('Please select a date'); return; }
+  if (!name) { toast('Please enter a reason'); return; }
+  if (app.holidays.some(h => h.date === date)) { toast('Date already in list'); return; }
+  app.holidays.push({ date, name });
+  saveData();
+  renderHolidays();
+  renderHome();
+  toast('Added');
+}
+
+function delHoliday(date) {
+  app.holidays = app.holidays.filter(h => h.date !== date);
+  saveData();
+  renderHolidays();
+  renderHome();
+  toast('Removed');
+}
+
+// ─── SETTINGS PAGE ───────────────────────────────────────────────────────────
+function renderSettings() {
+  const s = app.settings;
+  document.getElementById('set-content').innerHTML = `
+    <div class="set-sec">
+      <h3>Academic Year</h3>
+      <div class="row">
+        <div class="fgrp"><label>Start Date</label><input type="date" id="sStart" value="${s.yearStart||''}"></div>
+        <div class="fgrp"><label>End Date</label>  <input type="date" id="sEnd"   value="${s.yearEnd||''}"></div>
+      </div>
+    </div>
+    <div class="set-sec">
+      <h3>First Group of the Year</h3>
+      <p style="font-size:12px;color:var(--sub);margin-bottom:12px">Select which group meets in Week 1 of the academic year.</p>
+      <div class="row">
+        <div class="fgrp">
+          <label>Wednesday — Week 1</label>
+          <select id="sWed">
+            <option value="Wed1" ${s.wedStartGroup==='Wed1'?'selected':''}>Wed1 (Kosaka, Satoh, Uchino, Horie, Hakim)</option>
+            <option value="Wed2" ${s.wedStartGroup==='Wed2'?'selected':''}>Wed2 (Kunitoh, Kominami, Kurosaki, Onishi, Hatsuda)</option>
+          </select>
+        </div>
+        <div class="fgrp">
+          <label>Thursday — Week 1</label>
+          <select id="sThu">
+            <option value="Thu1" ${s.thuStartGroup==='Thu1'?'selected':''}>Thu1 (Nishizawa, Kusumi, Nawar, Todoriki, Ohata)</option>
+            <option value="Thu2" ${s.thuStartGroup==='Thu2'?'selected':''}>Thu2 (Kobayashi, Tuchihashi, Zeng, Yamashita, Okumura)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row mt8">
+      <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+      <button class="btn btn-success" onclick="exportJSON()">Export JSON</button>
+      <button class="btn btn-sec"     onclick="document.getElementById('importFile').click()">Import JSON</button>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
+    </div>
+    <div class="set-sec mt24" style="border:1.5px solid #fecaca">
+      <h3 style="color:var(--hol)">Danger Zone</h3>
+      <button class="btn btn-danger" onclick="resetAll()">Reset All Data to Defaults</button>
+    </div>
+    <div class="set-sec mt16">
+      <h3>Group Members</h3>
+      ${Object.entries(GROUPS).map(([k,g]) => `
+        <div class="grp-row">
+          ${badge(k)}
+          <span style="font-size:12px;color:var(--sub);min-width:70px">${g.dayNum===3?'Wednesday':'Thursday'}</span>
+          <span class="grp-mbrs">${g.members.join(', ')}</span>
+        </div>`).join('')}
+    </div>`;
+}
+
+function saveSettings() {
+  const start = document.getElementById('sStart').value;
+  const end   = document.getElementById('sEnd').value;
+  if (!start || !end) { toast('Please fill in both dates'); return; }
+  if (start >= end)   { toast('End must be after start');  return; }
+  app.settings = { yearStart: start, yearEnd: end, wedStartGroup: document.getElementById('sWed').value, thuStartGroup: document.getElementById('sThu').value };
+  saveData();
+  toast('Settings saved');
+  renderHome();
+}
+
+function exportJSON() {
+  const blob = new Blob([JSON.stringify({ version:2, exportedAt: new Date().toISOString(), ...app }, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `meeting-schedule-${toStr(new Date())}.json`;
+  a.click(); URL.revokeObjectURL(a.href);
+  toast('Exported');
+}
+
+function importJSON(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    try {
+      const p = JSON.parse(ev.target.result);
+      if (p.settings)  app.settings  = p.settings;
+      if (p.holidays)  app.holidays  = p.holidays;
+      saveData(); renderSettings(); renderHome(); renderHolidays();
+      toast('Imported');
+    } catch { toast('Invalid JSON'); }
+  };
+  r.readAsText(file);
+  e.target.value = '';
+}
+
+function resetAll() {
+  if (!confirm('Reset all data to defaults? This cannot be undone.')) return;
+  app = { settings: { ...DEFAULT_SETTINGS }, holidays: DEFAULT_HOLIDAYS.map(h=>({...h})) };
+  saveData(); renderSettings(); renderHome(); renderHolidays();
+  toast('Reset complete');
+}
+
+// ─── NAVIGATION ──────────────────────────────────────────────────────────────
+const renderers = { home: renderHome, schedule: renderSchedule, holidays: renderHolidays, settings: renderSettings };
+
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(`page-${page}`).classList.add('active');
+  document.querySelector(`[data-page="${page}"]`).classList.add('active');
+  renderers[page]();
+}
+
+document.querySelectorAll('.nav-tab').forEach(tab => {
+  tab.addEventListener('click', () => navigate(tab.dataset.page));
+});
+
+// ─── TOAST ───────────────────────────────────────────────────────────────────
+let _tt;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(_tt); _tt = setTimeout(() => el.classList.remove('show'), 2400);
+}
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+renderHome();
+</script>
+</body>
+</html>
