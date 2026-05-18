@@ -6,51 +6,55 @@
 <title>Lab Meeting Schedule</title>
 <style>
 :root {
-  --bg: #f1f5f9; --card: #fff; --nav: #1e293b;
-  --text: #1e293b; --sub: #64748b; --border: #e2e8f0;
+  --bg:#f1f5f9; --card:#fff; --nav:#1e293b;
+  --text:#1e293b; --sub:#64748b; --border:#e2e8f0;
   --wed1:#2563eb; --wed1-l:#dbeafe; --wed1-d:#1d4ed8;
   --wed2:#0d9488; --wed2-l:#ccfbf1; --wed2-d:#0f766e;
   --thu1:#d97706; --thu1-l:#fef3c7; --thu1-d:#b45309;
   --thu2:#7c3aed; --thu2-l:#ede9fe; --thu2-d:#6d28d9;
   --hol:#dc2626;  --hol-l:#fee2e2;
-  --now:#0ea5e9;  --arch:#94a3b8;
+  --now:#0ea5e9;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 
-/* NAV */
+/* ── NAV ── */
 .nav{background:var(--nav);position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.3)}
 .nav-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;padding:0 16px;height:54px;gap:4px}
 .nav-brand{font-size:15px;font-weight:700;color:#f8fafc;white-space:nowrap;margin-right:8px}
 .nav-tab{background:none;border:none;color:#94a3b8;font-size:13px;font-weight:600;padding:6px 12px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s;white-space:nowrap}
 .nav-tab:hover{background:rgba(255,255,255,.1);color:#f1f5f9}
 .nav-tab.active{background:rgba(255,255,255,.18);color:#f8fafc}
+.conn-dot{width:8px;height:8px;border-radius:50%;background:#94a3b8;flex-shrink:0;margin-left:auto;transition:background .4s}
+.conn-dot.online{background:#22c55e}
+.conn-dot.offline{background:#ef4444}
+.conn-label{font-size:11px;color:#64748b;margin-left:4px;white-space:nowrap}
 
-/* YEAR BAR */
+/* ── YEAR BAR ── */
 .year-bar{background:#0f172a;border-bottom:1px solid #1e293b;padding:0 16px}
-.year-bar-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:10px;height:40px}
-.fy-label{color:#f8fafc;font-size:13px;font-weight:700}
-.fy-sub{color:#94a3b8;font-size:12px}
-.fy-sep{color:#334155;font-size:14px;margin:0 2px}
-.fy-btn{background:none;border:1px solid #334155;color:#94a3b8;padding:3px 10px;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.year-bar-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:8px;height:40px;flex-wrap:nowrap;overflow-x:auto}
+.fy-label{color:#f8fafc;font-size:13px;font-weight:700;white-space:nowrap}
+.fy-sub{color:#94a3b8;font-size:12px;white-space:nowrap}
+.fy-btn{background:none;border:1px solid #334155;color:#94a3b8;padding:3px 10px;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0}
 .fy-btn:hover{border-color:#94a3b8;color:#f1f5f9}
-.fy-btn.fy-active{border-color:#0ea5e9;color:#0ea5e9}
-.fy-btn.fy-arch{opacity:.5;font-style:italic}
-.fy-new{background:#059669;border:none;color:#fff;padding:3px 10px;border-radius:5px;font-size:12px;font-weight:700;cursor:pointer;margin-left:auto}
+.fy-btn.fy-active{border-color:var(--now);color:var(--now)}
+.fy-btn.fy-arch{opacity:.5}
+.fy-sep{color:#334155;flex-shrink:0}
+.fy-new{background:#059669;border:none;color:#fff;padding:3px 10px;border-radius:5px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0}
 .fy-new:hover{background:#047857}
 
-/* PAGES */
+/* ── PAGES ── */
 .page{display:none}.page.active{display:block}
 .container{max-width:960px;margin:0 auto;padding:24px 16px}
 
-/* UTIL */
+/* ── UTILS ── */
 .mt8{margin-top:8px}.mt16{margin-top:16px}.mt24{margin-top:24px}
 .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .sec-title{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--sub);margin-bottom:12px}
 .empty{text-align:center;padding:48px 20px;color:var(--sub);font-size:14px}
-.arch-banner{background:#fef3c7;border:1.5px solid #fcd34d;border-radius:8px;padding:10px 16px;font-size:13px;font-weight:600;color:#92400e;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.arch-banner{background:#fef3c7;border:1.5px solid #fcd34d;border-radius:8px;padding:10px 16px;font-size:13px;font-weight:600;color:#92400e;margin-bottom:16px}
 
-/* BADGE */
+/* ── BADGES ── */
 .badge{display:inline-block;padding:2px 9px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:.04em;white-space:nowrap}
 .b-Wed1{background:var(--wed1-l);color:var(--wed1-d)}
 .b-Wed2{background:var(--wed2-l);color:var(--wed2-d)}
@@ -59,7 +63,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .b-hol{background:var(--hol-l);color:var(--hol)}
 .now-badge{background:var(--now);color:#fff;font-size:10px;font-weight:800;padding:3px 8px;border-radius:4px;letter-spacing:.06em;text-transform:uppercase;flex-shrink:0}
 
-/* HOME CARDS */
+/* ── HOME CARDS ── */
 .week-header{display:flex;align-items:center;gap:8px;margin-bottom:14px}
 .week-label{font-size:15px;font-weight:700}
 .cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -78,7 +82,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .mitem{font-size:13px;display:flex;align-items:center;gap:7px}
 .mitem::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0}
 
-/* UPCOMING */
+/* ── UPCOMING ── */
 .upcoming-box{background:var(--card);border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.07);overflow:hidden}
 .up-row{display:flex;align-items:center;padding:11px 16px;border-bottom:1px solid var(--border);gap:10px}
 .up-row:last-child{border-bottom:none}
@@ -86,7 +90,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .up-date{font-size:13px;font-weight:600;min-width:120px;flex-shrink:0}
 .up-mbrs{font-size:12px;color:var(--sub);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-/* SCHEDULE */
+/* ── SCHEDULE ── */
 .sched-stats{display:flex;align-items:center;gap:16px;margin-bottom:16px;flex-wrap:wrap}
 .sched-stat{font-size:13px;color:var(--sub)}
 .sched-stat strong{color:var(--text);font-size:15px}
@@ -99,10 +103,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .sched-row:last-child{border-bottom:none}
 .sched-row.is-now{background:#eff6ff}
 .sched-row.is-past .sched-date,.sched-row.is-past .sched-mbrs{opacity:.4}
-.sched-date{font-size:13px;font-weight:600;min-width:120px;flex-shrink:0}
+.sched-date{font-size:13px;font-weight:600;min-width:130px;flex-shrink:0}
 .sched-mbrs{font-size:12px;color:var(--sub);flex:1}
 
-/* HOLIDAYS */
+/* ── FORMS ── */
 .form-card{background:var(--card);border-radius:12px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
 .form-card h3{font-size:14px;font-weight:700;margin-bottom:14px}
 .fgrp{display:flex;flex-direction:column;gap:5px;flex:1;min-width:130px}
@@ -113,21 +117,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .hol-box{background:var(--card);border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.07);overflow:hidden}
 .hol-row{display:flex;align-items:center;padding:11px 16px;border-bottom:1px solid var(--border);gap:12px}
 .hol-row:last-child{border-bottom:none}
-.hol-date{font-size:13px;font-weight:600;min-width:120px;flex-shrink:0}
+.hol-date{font-size:13px;font-weight:600;min-width:130px;flex-shrink:0}
 .hol-name{font-size:13px;color:var(--sub);flex:1}
 
-/* SETTINGS */
+/* ── SETTINGS ── */
 .set-sec{background:var(--card);border-radius:12px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.07);margin-bottom:14px}
 .set-sec h3{font-size:14px;font-weight:700;padding-bottom:12px;margin-bottom:14px;border-bottom:1px solid var(--border)}
 .grp-edit{border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:10px}
 .grp-edit-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.grp-edit-label{font-size:13px;font-weight:700;flex:1}
-.year-row{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);gap:10px;flex-wrap:wrap}
+.year-row{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);gap:8px;flex-wrap:wrap}
 .year-row:last-child{border-bottom:none}
 .year-row-label{font-size:14px;font-weight:700;min-width:70px}
 .year-row-sub{font-size:12px;color:var(--sub);flex:1}
 
-/* BUTTONS */
+/* ── BUTTONS ── */
 .btn{padding:9px 18px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap}
 .btn:active{transform:scale(.97)}
 .btn-primary{background:var(--wed1);color:#fff}.btn-primary:hover{background:var(--wed1-d)}
@@ -139,7 +142,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .btn-del{background:none;border:1px solid #fecaca;color:var(--hol);padding:4px 10px;border-radius:6px;font-size:12px;cursor:pointer;transition:background .15s;flex-shrink:0}
 .btn-del:hover{background:var(--hol-l)}
 
-/* MODAL */
+/* ── MODAL ── */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center}
 .overlay.open{display:flex}
 .modal{background:#fff;border-radius:14px;width:min(520px,94vw);max-height:88vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.2);animation:slideUp .2s ease}
@@ -151,7 +154,33 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .modal-body{padding:20px 22px}
 .modal-ft{padding:14px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;position:sticky;bottom:0;background:#fff;border-radius:0 0 14px 14px}
 
-/* TOAST */
+/* ── LOADING & SETUP ── */
+#loadingScreen{position:fixed;inset:0;background:#fff;z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+#loadingScreen h2{font-size:18px;font-weight:700;color:var(--text)}
+#loadingScreen p{font-size:14px;color:var(--sub)}
+.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--wed1);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#setupScreen{position:fixed;inset:0;background:#f1f5f9;z-index:400;overflow-y:auto;display:none}
+.setup-inner{max-width:600px;margin:40px auto;padding:24px}
+.setup-card{background:#fff;border-radius:14px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,.1)}
+.setup-card h1{font-size:20px;font-weight:800;margin-bottom:6px}
+.setup-card .subtitle{font-size:14px;color:var(--sub);margin-bottom:24px}
+.step{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
+.step:last-of-type{border-bottom:none}
+.step-num{width:28px;height:28px;border-radius:50%;background:var(--wed1);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-body h3{font-size:14px;font-weight:700;margin-bottom:4px}
+.step-body p{font-size:13px;color:var(--sub);line-height:1.6}
+.step-body code{background:#f1f5f9;padding:1px 5px;border-radius:4px;font-size:12px;font-family:monospace}
+.config-area{width:100%;min-height:180px;font-family:monospace;font-size:12px;padding:12px;border:1.5px solid var(--border);border-radius:8px;outline:none;resize:vertical;margin-top:10px}
+.config-area:focus{border-color:var(--wed1);background:#fff}
+.error-msg{color:var(--hol);font-size:13px;margin-top:8px;display:none}
+
+/* ── SYNC indicator ── */
+.sync-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#22c55e;margin-right:4px;animation:pulse 1.5s ease infinite;opacity:0}
+.sync-dot.syncing{opacity:1}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── TOAST ── */
 #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--nav);color:#fff;padding:10px 22px;border-radius:100px;font-size:13px;font-weight:600;opacity:0;transition:all .3s;z-index:300;pointer-events:none;white-space:nowrap}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
@@ -159,13 +188,54 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   .nav-brand{display:none}
   .nav-tab{padding:6px 8px;flex:1;text-align:center;font-size:12px}
   .container{padding:16px 12px}
-  .year-bar-inner{gap:6px}
-  .fy-sub{display:none}
+  .conn-label{display:none}
 }
 </style>
 </head>
 <body>
 
+<!-- ── LOADING ── -->
+<div id="loadingScreen">
+  <div class="spinner"></div>
+  <h2>Lab Meeting</h2>
+  <p id="loadingMsg">Connecting to database…</p>
+</div>
+
+<!-- ── FIREBASE SETUP ── -->
+<div id="setupScreen">
+  <div class="setup-inner">
+    <div class="setup-card">
+      <h1>&#128197; Firebase Setup</h1>
+      <p class="subtitle">One-time setup to enable shared data for your team. Takes about 15 minutes.</p>
+
+      <div class="step"><div class="step-num">1</div><div class="step-body"><h3>Create a Firebase project</h3><p>Go to <strong>console.firebase.google.com</strong> → "Add project" → Enter any name (e.g. <code>lab-meeting</code>) → Disable Google Analytics → Create</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><h3>Enable Realtime Database</h3><p>Left menu → "Build" → "Realtime Database" → "Create database" → Choose a region → Select <strong>"Start in test mode"</strong> → Enable</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><h3>Get your config</h3><p>Project Overview ⚙ → "Project settings" → "Your apps" → Click the <strong>&lt;/&gt;</strong> (Web) icon → Register app → Copy the <code>firebaseConfig</code> object</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body">
+        <h3>Paste your config here</h3>
+        <textarea class="config-area" id="configInput" placeholder='Paste the firebaseConfig object here, e.g.:
+{
+  apiKey: "AIza...",
+  authDomain: "lab-meeting-xxxx.firebaseapp.com",
+  databaseURL: "https://lab-meeting-xxxx-default-rtdb.firebaseio.com",
+  projectId: "lab-meeting-xxxx",
+  storageBucket: "lab-meeting-xxxx.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abc123"
+}'></textarea>
+        <div class="error-msg" id="configError"></div>
+      </div></div>
+
+      <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="saveConfig()">Connect to Firebase</button>
+        <button class="btn btn-sec" onclick="useLocalMode()">Use Local Storage Only</button>
+      </div>
+      <p style="font-size:12px;color:var(--sub);margin-top:12px">&#128274; Your config is stored only in this browser. Data in Firebase is shared with everyone who has the app URL.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAIN APP ── -->
 <nav class="nav">
   <div class="nav-inner">
     <div class="nav-brand">&#128197; Lab Meeting</div>
@@ -173,35 +243,31 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <button class="nav-tab" data-page="schedule">Schedule</button>
     <button class="nav-tab" data-page="holidays">Holidays</button>
     <button class="nav-tab" data-page="settings">Settings</button>
+    <span class="conn-dot" id="connDot" title="Connection status"></span>
+    <span class="conn-label" id="connLabel">Connecting…</span>
   </div>
 </nav>
-
-<div class="year-bar">
-  <div class="year-bar-inner" id="yearBar"></div>
-</div>
+<div class="year-bar"><div class="year-bar-inner" id="yearBar"></div></div>
 
 <div id="page-home"     class="page active"><div class="container" id="home-content"></div></div>
 <div id="page-schedule" class="page">       <div class="container" id="sched-content"></div></div>
 <div id="page-holidays" class="page">       <div class="container" id="hol-content"></div></div>
 <div id="page-settings" class="page">       <div class="container" id="set-content"></div></div>
 
-<!-- New Year Modal -->
+<!-- ── NEW YEAR MODAL ── -->
 <div class="overlay" id="newYearModal" onclick="overlayClose(event,'newYearModal')">
   <div class="modal">
     <div class="modal-hd"><h2>Add New Academic Year</h2><button class="modal-x" onclick="closeModal('newYearModal')">&#10005;</button></div>
     <div class="modal-body">
       <div class="row" style="margin-bottom:16px">
-        <div class="fgrp"><label>Fiscal Year (starting April)</label>
-          <select id="nyFY"></select></div>
+        <div class="fgrp"><label>Fiscal Year (starting April)</label><select id="nyFY"></select></div>
       </div>
       <div class="row" style="margin-bottom:16px">
-        <div class="fgrp"><label>Wednesday — Week 1</label>
-          <select id="nyWed"><option value="Wed1">Wed1</option><option value="Wed2">Wed2</option></select></div>
-        <div class="fgrp"><label>Thursday — Week 1</label>
-          <select id="nyThu"><option value="Thu1">Thu1</option><option value="Thu2">Thu2</option></select></div>
+        <div class="fgrp"><label>Wednesday — Week 1</label><select id="nyWed"><option value="Wed1">Wed1</option><option value="Wed2">Wed2</option></select></div>
+        <div class="fgrp"><label>Thursday — Week 1</label><select id="nyThu"><option value="Thu1">Thu1</option><option value="Thu2">Thu2</option></select></div>
       </div>
       <div style="font-size:12px;color:var(--sub);background:#f8fafc;padding:10px 12px;border-radius:8px">
-        &#9432; National holidays for the selected year will be pre-filled automatically. You can add or remove them in the Holidays tab.
+        &#9432; National holidays for the selected year will be pre-filled automatically.
       </div>
     </div>
     <div class="modal-ft">
@@ -213,86 +279,93 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <div id="toast"></div>
 
+<!-- ── FIREBASE SDK ── -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+
 <script>
 // ═══════════════════════════════════════════════════════════════
-// HOLIDAY DATABASE  (FY = year April starts)
+// HOLIDAY DATABASE
 // ═══════════════════════════════════════════════════════════════
 const HOL_DB = {
   2025: [
-    { date:'2025-04-29', name:'Showa Day' },
-    { date:'2025-05-03', name:'Constitution Day' },
-    { date:'2025-05-04', name:'Greenery Day' },
-    { date:'2025-05-05', name:"Children's Day" },
-    { date:'2025-05-06', name:'Substitute Holiday' },
-    { date:'2025-07-21', name:'Marine Day' },
-    { date:'2025-08-11', name:'Mountain Day' },
-    { date:'2025-09-15', name:'Respect for the Aged Day' },
-    { date:'2025-09-23', name:'Autumnal Equinox Day' },
-    { date:'2025-10-13', name:'Sports Day' },
-    { date:'2025-11-03', name:'Culture Day' },
-    { date:'2025-11-23', name:'Labor Thanksgiving Day' },
-    { date:'2025-11-24', name:'Substitute Holiday' },
-    { date:'2026-01-01', name:"New Year's Day" },
-    { date:'2026-01-02', name:'New Year Holiday' },
-    { date:'2026-01-12', name:'Coming of Age Day' },
-    { date:'2026-02-11', name:'National Foundation Day' },
-    { date:'2026-02-23', name:"Emperor's Birthday" },
-    { date:'2026-03-20', name:'Vernal Equinox Day' },
+    {date:'2025-04-29',name:'Showa Day'},
+    {date:'2025-05-03',name:'Constitution Day'},
+    {date:'2025-05-04',name:'Greenery Day'},
+    {date:'2025-05-05',name:"Children's Day"},
+    {date:'2025-05-06',name:'Substitute Holiday'},
+    {date:'2025-07-21',name:'Marine Day'},
+    {date:'2025-08-11',name:'Mountain Day'},
+    {date:'2025-09-15',name:'Respect for the Aged Day'},
+    {date:'2025-09-23',name:'Autumnal Equinox Day'},
+    {date:'2025-10-13',name:'Sports Day'},
+    {date:'2025-11-03',name:'Culture Day'},
+    {date:'2025-11-23',name:'Labor Thanksgiving Day'},
+    {date:'2025-11-24',name:'Substitute Holiday'},
+    {date:'2026-01-01',name:"New Year's Day"},
+    {date:'2026-01-02',name:'New Year Holiday'},
+    {date:'2026-01-12',name:'Coming of Age Day'},
+    {date:'2026-02-11',name:'National Foundation Day'},
+    {date:'2026-02-23',name:"Emperor's Birthday"},
+    {date:'2026-03-20',name:'Vernal Equinox Day'},
   ],
   2026: [
-    { date:'2026-04-29', name:'Showa Day' },          // Wednesday
-    { date:'2026-05-03', name:'Constitution Day' },
-    { date:'2026-05-04', name:'Greenery Day' },
-    { date:'2026-05-05', name:"Children's Day" },
-    { date:'2026-05-06', name:'Substitute Holiday' },  // Wednesday
-    { date:'2026-07-20', name:'Marine Day' },
-    { date:'2026-08-11', name:'Mountain Day' },
-    { date:'2026-09-21', name:'Respect for the Aged Day' },
-    { date:'2026-09-23', name:'Autumnal Equinox Day' }, // Wednesday
-    { date:'2026-10-12', name:'Sports Day' },
-    { date:'2026-11-03', name:'Culture Day' },
-    { date:'2026-11-23', name:'Labor Thanksgiving Day' },
-    { date:'2027-01-01', name:"New Year's Day" },
-    { date:'2027-01-11', name:'Coming of Age Day' },
-    { date:'2027-02-11', name:'National Foundation Day' }, // Thursday
-    { date:'2027-02-23', name:"Emperor's Birthday" },
-    { date:'2027-03-20', name:'Vernal Equinox Day' },
+    {date:'2026-04-29',name:'Showa Day'},           // Wednesday
+    {date:'2026-05-03',name:'Constitution Day'},
+    {date:'2026-05-04',name:'Greenery Day'},
+    {date:'2026-05-05',name:"Children's Day"},
+    {date:'2026-05-06',name:'Substitute Holiday'},  // Wednesday
+    {date:'2026-07-20',name:'Marine Day'},
+    {date:'2026-08-11',name:'Mountain Day'},
+    {date:'2026-09-21',name:'Respect for the Aged Day'},
+    {date:'2026-09-23',name:'Autumnal Equinox Day'}, // Wednesday
+    {date:'2026-10-12',name:'Sports Day'},
+    {date:'2026-11-03',name:'Culture Day'},
+    {date:'2026-11-23',name:'Labor Thanksgiving Day'},
+    {date:'2027-01-01',name:"New Year's Day"},
+    {date:'2027-01-11',name:'Coming of Age Day'},
+    {date:'2027-02-11',name:'National Foundation Day'}, // Thursday
+    {date:'2027-02-23',name:"Emperor's Birthday"},
+    {date:'2027-03-20',name:'Vernal Equinox Day'},
   ],
   2027: [
-    { date:'2027-04-29', name:'Showa Day' },
-    { date:'2027-05-03', name:'Constitution Day' },
-    { date:'2027-05-04', name:'Greenery Day' },
-    { date:'2027-05-05', name:"Children's Day" },
-    { date:'2027-07-19', name:'Marine Day' },
-    { date:'2027-08-11', name:'Mountain Day' },
-    { date:'2027-09-20', name:'Respect for the Aged Day' },
-    { date:'2027-09-23', name:'Autumnal Equinox Day' },
-    { date:'2027-10-11', name:'Sports Day' },
-    { date:'2027-11-03', name:'Culture Day' },
-    { date:'2027-11-23', name:'Labor Thanksgiving Day' },
-    { date:'2028-01-01', name:"New Year's Day" },
-    { date:'2028-01-10', name:'Coming of Age Day' },
-    { date:'2028-02-11', name:'National Foundation Day' },
-    { date:'2028-02-23', name:"Emperor's Birthday" },
-    { date:'2028-03-20', name:'Vernal Equinox Day' },
+    {date:'2027-04-29',name:'Showa Day'},
+    {date:'2027-05-03',name:'Constitution Day'},
+    {date:'2027-05-04',name:'Greenery Day'},
+    {date:'2027-05-05',name:"Children's Day"},
+    {date:'2027-07-19',name:'Marine Day'},
+    {date:'2027-08-11',name:'Mountain Day'},
+    {date:'2027-09-20',name:'Respect for the Aged Day'},
+    {date:'2027-09-23',name:'Autumnal Equinox Day'},
+    {date:'2027-10-11',name:'Sports Day'},
+    {date:'2027-11-03',name:'Culture Day'},
+    {date:'2027-11-23',name:'Labor Thanksgiving Day'},
+    {date:'2028-01-01',name:"New Year's Day"},
+    {date:'2028-01-10',name:'Coming of Age Day'},
+    {date:'2028-02-11',name:'National Foundation Day'},
+    {date:'2028-02-23',name:"Emperor's Birthday"},
+    {date:'2028-03-20',name:'Vernal Equinox Day'},
   ],
 };
 
-// ═══════════════════════════════════════════════════════════════
-// CONSTANTS
-// ═══════════════════════════════════════════════════════════════
-const STORE = 'labmeeting_v3';
-const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const WED_PAIR = ['Wed1','Wed2'];
+const THU_PAIR = ['Thu1','Thu2'];
+const GROUP_CLS = {Wed1:'cWed1',Wed2:'cWed2',Thu1:'cThu1',Thu2:'cThu2'};
+const LOCAL_CONFIG_KEY = 'lm_firebase_config';
+const LOCAL_FALLBACK_KEY = 'lm_local_data_v3';
+const DB_PATH = 'labmeeting/v3';
 
-const GROUP_DAYS = { Wed1:3, Wed2:3, Thu1:4, Thu2:4 };
-const GROUP_CLS  = { Wed1:'cWed1', Wed2:'cWed2', Thu1:'cThu1', Thu2:'cThu2' };
-const WED_PAIR   = ['Wed1','Wed2'];
-const THU_PAIR   = ['Thu1','Thu2'];
+const MON_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const DOW_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
 // ═══════════════════════════════════════════════════════════════
-// DATA
+// APP STATE
 // ═══════════════════════════════════════════════════════════════
+let app = null;
+let dbRef = null;
+let isFirebase = false;
+let isSaving = false;
+
 function curFY() {
   const n = new Date();
   return n.getMonth() >= 3 ? n.getFullYear() : n.getFullYear() - 1;
@@ -312,258 +385,339 @@ function defaultApp() {
       [fy]: {
         wedStartGroup: 'Wed1',
         thuStartGroup: 'Thu1',
-        holidays: (HOL_DB[fy] || []).map(h => ({...h})),
+        holidays: (HOL_DB[fy]||[]).map(h=>({...h})),
         archived: false,
       }
     }
   };
 }
 
-function loadData() {
-  try {
-    const s = localStorage.getItem(STORE);
-    if (s) {
-      const d = JSON.parse(s);
-      // migrate v2 format
-      if (d.settings && !d.years) {
-        const fy = curFY();
-        return {
-          currentFY: fy,
-          groups: {
-            Wed1: ['Kosaka','Satoh','Uchino','Horie','Hakim'],
-            Wed2: ['Kunitoh','Kominami','Kurosaki','Onishi','Hatsuda'],
-            Thu1: ['Nishizawa','Kusumi','Nawar','Todoriki','Ohata'],
-            Thu2: ['Kobayashi','Tuchihashi','Zeng','Yamashita','Okumura'],
-          },
-          years: {
-            [fy]: {
-              wedStartGroup: d.settings.wedStartGroup || 'Wed1',
-              thuStartGroup: d.settings.thuStartGroup || 'Thu1',
-              holidays: (d.holidays || []).map(h => ({...h})),
-              archived: false,
-            }
-          }
-        };
-      }
-      return d;
-    }
-  } catch {}
-  return defaultApp();
+// ═══════════════════════════════════════════════════════════════
+// FIREBASE INIT
+// ═══════════════════════════════════════════════════════════════
+function loadSavedConfig() {
+  try { return JSON.parse(localStorage.getItem(LOCAL_CONFIG_KEY)); } catch { return null; }
 }
 
-function saveData() { localStorage.setItem(STORE, JSON.stringify(app)); }
+function startApp() {
+  const config = loadSavedConfig();
 
-let app = loadData();
+  if (!config) {
+    // Check if they chose local mode before
+    const localMode = localStorage.getItem('lm_local_mode');
+    if (localMode === '1') { useLocalMode(true); return; }
+    hideLoading();
+    document.getElementById('setupScreen').style.display = 'block';
+    return;
+  }
 
-// Ensure currentFY year entry exists
-if (!app.years[app.currentFY]) {
-  app.years[app.currentFY] = { wedStartGroup:'Wed1', thuStartGroup:'Thu1', holidays: (HOL_DB[app.currentFY]||[]).map(h=>({...h})), archived:false };
-  saveData();
+  try {
+    firebase.initializeApp(config);
+    const db = firebase.database();
+    dbRef = db.ref(DB_PATH);
+    isFirebase = true;
+
+    // Connection status
+    db.ref('.info/connected').on('value', snap => {
+      const online = snap.val() === true;
+      document.getElementById('connDot').className = 'conn-dot ' + (online ? 'online' : 'offline');
+      document.getElementById('connLabel').textContent = online ? 'Online' : 'Offline';
+    });
+
+    // Real-time listener — fires on connect AND any remote change
+    dbRef.on('value', snap => {
+      try {
+        const raw = snap.val();
+        if (raw) {
+          app = JSON.parse(raw);
+          ensureCurrentFY();
+        } else {
+          app = defaultApp();
+          pushToFirebase();
+        }
+      } catch {
+        app = defaultApp();
+        pushToFirebase();
+      }
+      hideLoading();
+      renderYearBar();
+      renderCurrent();
+    }, err => {
+      document.getElementById('loadingMsg').textContent = 'Connection failed: ' + err.message;
+    });
+
+  } catch (e) {
+    console.error(e);
+    hideLoading();
+    document.getElementById('setupScreen').style.display = 'block';
+    showConfigError('Firebase error: ' + e.message);
+  }
+}
+
+// ── SAVE ────────────────────────────────────────────────────────
+let _saveTimer;
+function saveData() {
+  if (isFirebase && dbRef) {
+    clearTimeout(_saveTimer);
+    _saveTimer = setTimeout(pushToFirebase, 700);
+  } else {
+    localStorage.setItem(LOCAL_FALLBACK_KEY, JSON.stringify(app));
+  }
+}
+
+function pushToFirebase() {
+  if (!dbRef) return;
+  isSaving = true;
+  dbRef.set(JSON.stringify(app)).finally(() => { isSaving = false; });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SETUP SCREEN ACTIONS
+// ═══════════════════════════════════════════════════════════════
+function saveConfig() {
+  const raw = document.getElementById('configInput').value.trim();
+  showConfigError('');
+
+  // Parse the pasted config (handle both JSON and JS object literal)
+  let config;
+  try {
+    // Try JSON first
+    config = JSON.parse(raw);
+  } catch {
+    try {
+      // Try evaluating as JS object literal
+      config = new Function('return (' + raw + ')')();
+    } catch (e) {
+      showConfigError('Could not parse config: ' + e.message);
+      return;
+    }
+  }
+
+  if (!config.apiKey || !config.databaseURL) {
+    showConfigError('Config is missing apiKey or databaseURL. Make sure you copied the full config.');
+    return;
+  }
+
+  localStorage.setItem(LOCAL_CONFIG_KEY, JSON.stringify(config));
+  document.getElementById('setupScreen').style.display = 'none';
+  document.getElementById('loadingScreen').style.display = 'flex';
+  document.getElementById('loadingMsg').textContent = 'Connecting to Firebase…';
+  startApp();
+}
+
+function useLocalMode(silent = false) {
+  localStorage.setItem('lm_local_mode', '1');
+  document.getElementById('setupScreen').style.display = 'none';
+  isFirebase = false;
+
+  // Connection indicator: local
+  document.getElementById('connDot').className = 'conn-dot';
+  document.getElementById('connLabel').textContent = 'Local only';
+
+  try {
+    const stored = localStorage.getItem(LOCAL_FALLBACK_KEY);
+    app = stored ? JSON.parse(stored) : defaultApp();
+    ensureCurrentFY();
+  } catch {
+    app = defaultApp();
+  }
+
+  hideLoading();
+  renderYearBar();
+  renderCurrent();
+  if (!silent) toast('Running in local-only mode');
+}
+
+function showConfigError(msg) {
+  const el = document.getElementById('configError');
+  el.textContent = msg;
+  el.style.display = msg ? 'block' : 'none';
+}
+
+function hideLoading() {
+  document.getElementById('loadingScreen').style.display = 'none';
+}
+
+function resetFirebaseConfig() {
+  if (!confirm('Remove Firebase config and switch to setup screen?')) return;
+  localStorage.removeItem(LOCAL_CONFIG_KEY);
+  localStorage.removeItem('lm_local_mode');
+  location.reload();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DATA HELPERS
+// ═══════════════════════════════════════════════════════════════
+function ensureCurrentFY() {
+  if (!app.years[app.currentFY]) {
+    app.years[app.currentFY] = {
+      wedStartGroup:'Wed1', thuStartGroup:'Thu1',
+      holidays:(HOL_DB[app.currentFY]||[]).map(h=>({...h})),
+      archived:false,
+    };
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════
 // DATE UTILS
 // ═══════════════════════════════════════════════════════════════
-function parseDate(s) { const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); }
-function toStr(d) { return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
-function pad(n) { return String(n).padStart(2,'0'); }
-function fmtDate(s) { const d=parseDate(s); return `${MON[d.getMonth()]} ${d.getDate()} (${DOW[d.getDay()]})`; }
-function fmtWeekRange(mon) {
-  const sun=new Date(mon); sun.setDate(sun.getDate()+6);
-  const ms=`${MON[mon.getMonth()]} ${mon.getDate()}`;
-  if(mon.getMonth()===sun.getMonth()) return `${ms}–${sun.getDate()}, ${mon.getFullYear()}`;
-  return `${ms} – ${MON[sun.getMonth()]} ${sun.getDate()}, ${mon.getFullYear()}`;
+function parseDate(s){const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)}
+function toStr(d){return`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}
+function pad(n){return String(n).padStart(2,'0')}
+function fmtDate(s){const d=parseDate(s);return`${MON_NAMES[d.getMonth()]} ${d.getDate()} (${DOW_NAMES[d.getDay()]})`}
+function fmtWeekRange(mon){
+  const sun=new Date(mon);sun.setDate(sun.getDate()+6);
+  const ms=`${MON_NAMES[mon.getMonth()]} ${mon.getDate()}`;
+  if(mon.getMonth()===sun.getMonth())return`${ms}–${sun.getDate()}, ${mon.getFullYear()}`;
+  return`${ms} – ${MON_NAMES[sun.getMonth()]} ${sun.getDate()}, ${mon.getFullYear()}`;
 }
-function monday(d) {
-  const r=new Date(d); r.setHours(0,0,0,0);
-  const dw=r.getDay(); r.setDate(r.getDate()+(dw===0?-6:1-dw)); return r;
+function monday(d){
+  const r=new Date(d);r.setHours(0,0,0,0);
+  const dw=r.getDay();r.setDate(r.getDate()+(dw===0?-6:1-dw));return r;
 }
-function addDays(d,n) { const r=new Date(d); r.setDate(r.getDate()+n); return r; }
-function today0() { const d=new Date(); d.setHours(0,0,0,0); return d; }
-
-function fyRange(fy) {
-  return { start:`${fy}-04-01`, end:`${fy+1}-03-31` };
-}
-function fyLabel(fy) { return `FY${fy}`; }
-function fyRangeLabel(fy) { return `Apr ${fy} – Mar ${fy+1}`; }
+function addDays(d,n){const r=new Date(d);r.setDate(r.getDate()+n);return r}
+function today0(){const d=new Date();d.setHours(0,0,0,0);return d}
+function fyLabel(fy){return`FY${fy}`}
+function fyRangeLabel(fy){return`Apr ${fy} – Mar ${fy+1}`}
 
 // ═══════════════════════════════════════════════════════════════
 // SCHEDULE GENERATION
 // ═══════════════════════════════════════════════════════════════
 function genSchedule(fy) {
-  const yr = app.years[fy];
-  if (!yr) return [];
-  const { start, end } = fyRange(fy);
-  const holMap = {};
-  yr.holidays.forEach(h => holMap[h.date] = h.name);
-
-  const s = parseDate(start), e = parseDate(end);
+  const yr = app.years[fy]; if (!yr) return [];
+  const holMap = {}; yr.holidays.forEach(h => holMap[h.date] = h.name);
+  const s = parseDate(`${fy}-04-01`), e = parseDate(`${fy+1}-03-31`);
   const events = [];
 
-  function genDay(targetDow, seq) {
+  function genDay(dow, seq) {
     let d = new Date(s);
-    while (d.getDay() !== targetDow) d.setDate(d.getDate()+1);
+    while (d.getDay() !== dow) d.setDate(d.getDate()+1);
     let idx = 0;
     while (d <= e) {
       const ds = toStr(d);
-      if (holMap[ds]) {
-        events.push({ date:ds, type:'holiday', group:null, reason:holMap[ds] });
-      } else {
-        events.push({ date:ds, type:'meeting', group:seq[idx%2] });
-        idx++;
-      }
-      d = new Date(d.getFullYear(), d.getMonth(), d.getDate()+7);
+      if (holMap[ds]) events.push({date:ds,type:'holiday',group:null,reason:holMap[ds]});
+      else { events.push({date:ds,type:'meeting',group:seq[idx%2]}); idx++; }
+      d = new Date(d.getFullYear(),d.getMonth(),d.getDate()+7);
     }
   }
 
-  const wSeq = yr.wedStartGroup==='Wed1' ? WED_PAIR : [...WED_PAIR].reverse();
-  const tSeq = yr.thuStartGroup==='Thu1' ? THU_PAIR : [...THU_PAIR].reverse();
-  genDay(3, wSeq);
-  genDay(4, tSeq);
-  events.sort((a,b) => a.date.localeCompare(b.date));
+  genDay(3, yr.wedStartGroup==='Wed1' ? WED_PAIR : [...WED_PAIR].reverse());
+  genDay(4, yr.thuStartGroup==='Thu1' ? THU_PAIR : [...THU_PAIR].reverse());
+  events.sort((a,b)=>a.date.localeCompare(b.date));
   return events;
 }
 
-function weekEvents(events, mon) {
+function weekEvs(events, mon) {
   const s=toStr(mon), e=toStr(addDays(mon,6));
-  return events.filter(ev => ev.date>=s && ev.date<=e);
+  return events.filter(ev=>ev.date>=s&&ev.date<=e);
 }
 
 function byWeek(events) {
   const map = new Map();
-  events.forEach(ev => {
-    const m = monday(parseDate(ev.date));
-    const k = toStr(m);
-    if (!map.has(k)) map.set(k,{mon:m,events:[]});
+  events.forEach(ev=>{
+    const m=monday(parseDate(ev.date)),k=toStr(m);
+    if(!map.has(k))map.set(k,{mon:m,events:[]});
     map.get(k).events.push(ev);
   });
-  return [...map.values()].sort((a,b) => toStr(a.mon).localeCompare(toStr(b.mon)));
+  return[...map.values()].sort((a,b)=>toStr(a.mon).localeCompare(toStr(b.mon)));
 }
 
-// Auto-detect which group should start next FY
-function detectNextStart(fy, dayNum, pair) {
-  const sched = genSchedule(fy);
-  const last = [...sched].reverse().find(e => e.type==='meeting' && parseDate(e.date).getDay()===dayNum);
-  if (!last) return pair[0];
-  return last.group === pair[0] ? pair[1] : pair[0];
+function detectNext(fy, dow, pair) {
+  const last=[...genSchedule(fy)].reverse().find(e=>e.type==='meeting'&&parseDate(e.date).getDay()===dow);
+  if(!last)return pair[0];
+  return last.group===pair[0]?pair[1]:pair[0];
 }
 
 // ═══════════════════════════════════════════════════════════════
 // RENDER HELPERS
 // ═══════════════════════════════════════════════════════════════
-function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function badge(g) {
-  if (!g) return `<span class="badge b-hol">Holiday</span>`;
-  return `<span class="badge b-${g}">${g}</span>`;
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function badge(g){
+  if(!g)return`<span class="badge b-hol">Holiday</span>`;
+  return`<span class="badge b-${g}">${g}</span>`;
 }
-function members(g) { return (app.groups[g]||[]).join(', '); }
+function members(g){return(app.groups[g]||[]).join(', ')}
 
 // ═══════════════════════════════════════════════════════════════
 // YEAR BAR
 // ═══════════════════════════════════════════════════════════════
 function renderYearBar() {
-  const sortedFYs = Object.keys(app.years).map(Number).sort();
-  const html = sortedFYs.map(fy => {
-    const yr = app.years[fy];
-    const isActive = fy === app.currentFY;
-    const arch = yr.archived ? ' fy-arch' : '';
-    const act  = isActive ? ' fy-active' : '';
-    return `<button class="fy-btn${arch}${act}" onclick="switchFY(${fy})">${fyLabel(fy)}${yr.archived?' ★':''}</button>`;
+  if (!app) return;
+  const fys = Object.keys(app.years).map(Number).sort();
+  const btns = fys.map(fy=>{
+    const yr=app.years[fy];
+    const act=fy===app.currentFY?' fy-active':'';
+    const arch=yr.archived?' fy-arch':'';
+    return`<button class="fy-btn${act}${arch}" onclick="switchFY(${fy})">${fyLabel(fy)}${yr.archived?' ★':''}</button>`;
   }).join('<span class="fy-sep">|</span>');
 
-  const yr = app.years[app.currentFY];
-  document.getElementById('yearBar').innerHTML = `
+  document.getElementById('yearBar').innerHTML=`
     <span class="fy-label">${fyLabel(app.currentFY)}</span>
     <span class="fy-sub">${fyRangeLabel(app.currentFY)}</span>
-    <span class="fy-sep" style="margin:0 4px">·</span>
-    ${html}
-    <button class="fy-new" onclick="openNewYear()">+ New Year</button>
-  `;
+    <span class="fy-sep" style="margin:0 2px">·</span>
+    ${btns}
+    <button class="fy-new" onclick="openNewYear()">+ New Year</button>`;
 }
 
-function switchFY(fy) {
-  app.currentFY = fy;
-  saveData();
-  renderYearBar();
-  renderCurrent();
-}
+function switchFY(fy){app.currentFY=fy;saveData();renderYearBar();renderCurrent()}
 
 // ═══════════════════════════════════════════════════════════════
 // HOME
 // ═══════════════════════════════════════════════════════════════
 function renderHome() {
-  const fy = app.currentFY;
-  const yr = app.years[fy];
-  const sched = genSchedule(fy);
-  const today = today0();
-  const thisMon = monday(today);
-  const nextMon = addDays(thisMon,7);
-  const afterMon = addDays(nextMon,7);
+  if (!app) return;
+  const fy=app.currentFY, yr=app.years[fy];
+  const sched=genSchedule(fy);
+  const today=today0(), thisMon=monday(today), nextMon=addDays(thisMon,7);
+  const upcoming=sched.filter(ev=>ev.date>=toStr(addDays(nextMon,7))).slice(0,10);
 
-  const upcoming = sched.filter(ev => ev.date >= toStr(afterMon)).slice(0,10);
-
-  document.getElementById('home-content').innerHTML = `
-    ${yr.archived ? `<div class="arch-banner">&#9733; Archived Year — ${fyLabel(fy)} (${fyRangeLabel(fy)})</div>` : ''}
-    ${weekSection(sched, thisMon, true)}
+  document.getElementById('home-content').innerHTML=`
+    ${yr.archived?`<div class="arch-banner">&#9733; Archived — ${fyLabel(fy)} (${fyRangeLabel(fy)})</div>`:''}
+    ${weekSection(sched,thisMon,true)}
     <div class="mt24"></div>
-    ${weekSection(sched, nextMon, false)}
-    ${upcoming.length ? `
-    <div class="mt24">
-      <div class="sec-title">Upcoming</div>
-      <div class="upcoming-box">
-        ${upcoming.map(ev => `
-          <div class="up-row ${ev.type==='holiday'?'hol':''}">
-            <div class="up-date">${fmtDate(ev.date)}</div>
-            ${badge(ev.group)}
-            <div class="up-mbrs">${ev.type==='meeting' ? members(ev.group) : esc(ev.reason)}</div>
-          </div>`).join('')}
-      </div>
-    </div>` : ''}`;
+    ${weekSection(sched,nextMon,false)}
+    ${upcoming.length?`<div class="mt24"><div class="sec-title">Upcoming</div><div class="upcoming-box">
+      ${upcoming.map(ev=>`<div class="up-row ${ev.type==='holiday'?'hol':''}">
+        <div class="up-date">${fmtDate(ev.date)}</div>${badge(ev.group)}
+        <div class="up-mbrs">${ev.type==='meeting'?members(ev.group):esc(ev.reason)}</div>
+      </div>`).join('')}</div></div>`:''}`;
 }
 
 function weekSection(sched, mon, isThis) {
-  const evs = weekEvents(sched, mon);
-  const wedEv = evs.find(e => parseDate(e.date).getDay()===3);
-  const thuEv = evs.find(e => parseDate(e.date).getDay()===4);
-  return `
-    <div>
-      <div class="week-header">
-        ${isThis ? '<span class="now-badge">This Week</span>' : ''}
-        <span class="week-label">${isThis ? '' : 'Next Week — '}${fmtWeekRange(mon)}</span>
-      </div>
-      <div class="cards">
-        ${meetCard(wedEv,'Wednesday')}
-        ${meetCard(thuEv,'Thursday')}
-      </div>
-    </div>`;
+  const evs=weekEvs(sched,mon);
+  const w=evs.find(e=>parseDate(e.date).getDay()===3);
+  const t=evs.find(e=>parseDate(e.date).getDay()===4);
+  return`<div>
+    <div class="week-header">
+      ${isThis?'<span class="now-badge">This Week</span>':''}
+      <span class="week-label">${isThis?'':' Next Week — '}${fmtWeekRange(mon)}</span>
+    </div>
+    <div class="cards">${meetCard(w,'Wednesday')}${meetCard(t,'Thursday')}</div>
+  </div>`;
 }
 
-function meetCard(ev, day) {
-  if (!ev) return `<div class="mcard cNone"><div class="mcard-day">${day}</div><div class="mcard-name">—</div><div style="font-size:12px;color:#9ca3af">Outside schedule range</div></div>`;
-  if (ev.type==='holiday') return `<div class="mcard cHol"><div class="mcard-day">${fmtDate(ev.date)} · ${day}</div><div class="mcard-name">Holiday</div><div style="font-size:13px;color:var(--hol)">${esc(ev.reason)}</div><div style="font-size:12px;color:#9ca3af;margin-top:8px">No meeting this week</div></div>`;
-  const ms = (app.groups[ev.group]||[]);
-  return `<div class="mcard ${GROUP_CLS[ev.group]}"><div class="mcard-day">${fmtDate(ev.date)} · ${day}</div><div class="mcard-name">${ev.group}</div><div class="mlist">${ms.map(m=>`<div class="mitem">${esc(m)}</div>`).join('')}</div></div>`;
+function meetCard(ev,day){
+  if(!ev)return`<div class="mcard cNone"><div class="mcard-day">${day}</div><div class="mcard-name">—</div><div style="font-size:12px;color:#9ca3af">Outside range</div></div>`;
+  if(ev.type==='holiday')return`<div class="mcard cHol"><div class="mcard-day">${fmtDate(ev.date)} · ${day}</div><div class="mcard-name">Holiday</div><div style="font-size:13px;color:var(--hol)">${esc(ev.reason)}</div><div style="font-size:12px;color:#9ca3af;margin-top:8px">No meeting</div></div>`;
+  const ms=(app.groups[ev.group]||[]);
+  return`<div class="mcard ${GROUP_CLS[ev.group]}"><div class="mcard-day">${fmtDate(ev.date)} · ${day}</div><div class="mcard-name">${ev.group}</div><div class="mlist">${ms.map(m=>`<div class="mitem">${esc(m)}</div>`).join('')}</div></div>`;
 }
 
 // ═══════════════════════════════════════════════════════════════
 // SCHEDULE
 // ═══════════════════════════════════════════════════════════════
 function renderSchedule() {
-  const fy = app.currentFY;
-  const yr = app.years[fy];
-  const sched = genSchedule(fy);
-  if (!sched.length) { document.getElementById('sched-content').innerHTML=`<div class="empty">No schedule data.</div>`; return; }
+  if(!app)return;
+  const fy=app.currentFY, yr=app.years[fy];
+  const sched=genSchedule(fy);
+  if(!sched.length){document.getElementById('sched-content').innerHTML=`<div class="empty">No data.</div>`;return}
+  const today=today0(), thisMon=monday(today), thisMStr=toStr(thisMon), todayStr=toStr(today);
+  const total=sched.filter(e=>e.type==='meeting').length;
+  const done=sched.filter(e=>e.type==='meeting'&&e.date<todayStr).length;
+  const weeks=byWeek(sched);
 
-  const today = today0();
-  const thisMon = monday(today);
-  const thisMStr = toStr(thisMon);
-  const todayStr = toStr(today);
-  const total = sched.filter(e=>e.type==='meeting').length;
-  const done  = sched.filter(e=>e.type==='meeting' && e.date<todayStr).length;
-  const weeks = byWeek(sched);
-
-  let html = `
-    ${yr.archived ? `<div class="arch-banner">&#9733; Archived Year — ${fyLabel(fy)} (${fyRangeLabel(fy)})</div>` : ''}
+  let html=`
+    ${yr.archived?`<div class="arch-banner">&#9733; Archived — ${fyLabel(fy)} (${fyRangeLabel(fy)})</div>`:''}
     <div class="sched-stats row">
       <div class="sched-stat"><strong>${total}</strong> meetings total</div>
       <div class="sched-stat"><strong>${done}</strong> completed</div>
@@ -571,159 +725,124 @@ function renderSchedule() {
       <button class="btn btn-sec btn-sm" style="margin-left:auto" onclick="jumpNow()">Jump to Today</button>
     </div>`;
 
-  weeks.forEach(wk => {
-    const wkStr = toStr(wk.mon);
-    const isNow = wkStr === thisMStr;
-    const isPast = wkStr < thisMStr;
-    html += `<div class="wk-block" id="wk-${wkStr}">
+  weeks.forEach(wk=>{
+    const wkStr=toStr(wk.mon), isNow=wkStr===thisMStr, isPast=wkStr<thisMStr;
+    html+=`<div class="wk-block" id="wk-${wkStr}">
       <div class="wk-hd ${isNow?'is-now':''}">
         ${isNow?'<span class="now-badge">Now</span>':''}
         <span class="wk-hd-label">${fmtWeekRange(wk.mon)}</span>
       </div>
-      <div class="sched-box">
-        ${wk.events.map(ev => schedRow(ev,isNow,isPast)).join('')}
-      </div>
+      <div class="sched-box">${wk.events.map(ev=>schedRow(ev,isNow,isPast)).join('')}</div>
     </div>`;
   });
-
-  document.getElementById('sched-content').innerHTML = html;
+  document.getElementById('sched-content').innerHTML=html;
 }
 
-function schedRow(ev, isNow, isPast) {
-  const dt = `<div class="sched-date">${fmtDate(ev.date)}</div>`;
-  if (ev.type==='holiday') return `<div class="sched-row ${isPast?'is-past':''}">${dt}${badge(null)}<div class="sched-mbrs">${esc(ev.reason)}</div></div>`;
-  return `<div class="sched-row ${isNow?'is-now':''} ${isPast?'is-past':''}">${dt}${badge(ev.group)}<div class="sched-mbrs">${members(ev.group)}</div></div>`;
+function schedRow(ev,isNow,isPast){
+  const dt=`<div class="sched-date">${fmtDate(ev.date)}</div>`;
+  if(ev.type==='holiday')return`<div class="sched-row ${isPast?'is-past':''}">${dt}${badge(null)}<div class="sched-mbrs">${esc(ev.reason)}</div></div>`;
+  return`<div class="sched-row ${isNow?'is-now':''} ${isPast?'is-past':''}">${dt}${badge(ev.group)}<div class="sched-mbrs">${members(ev.group)}</div></div>`;
 }
 
-function jumpNow() {
-  const el = document.getElementById(`wk-${toStr(monday(today0()))}`);
-  if (el) el.scrollIntoView({behavior:'smooth',block:'start'});
-}
+function jumpNow(){const el=document.getElementById(`wk-${toStr(monday(today0()))}`);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}
 
 // ═══════════════════════════════════════════════════════════════
 // HOLIDAYS
 // ═══════════════════════════════════════════════════════════════
 function renderHolidays() {
-  const fy = app.currentFY;
-  const yr = app.years[fy];
-  const sorted = [...yr.holidays].sort((a,b)=>a.date.localeCompare(b.date));
-  const { start, end } = fyRange(fy);
+  if(!app)return;
+  const fy=app.currentFY, yr=app.years[fy];
+  const sorted=[...yr.holidays].sort((a,b)=>a.date.localeCompare(b.date));
+  const start=`${fy}-04-01`, end=`${fy+1}-03-31`;
 
-  document.getElementById('hol-content').innerHTML = `
+  document.getElementById('hol-content').innerHTML=`
     <div class="form-card" style="margin-bottom:16px">
       <h3>Add Holiday / Professor Absent — ${fyLabel(fy)}</h3>
       <div class="row">
-        <div class="fgrp">
-          <label>Date (${start.slice(0,7)} – ${end.slice(0,7)})</label>
-          <input type="date" id="hDate" min="${start}" max="${end}">
-        </div>
-        <div class="fgrp"><label>Reason</label>
-          <input type="text" id="hName" autocomplete="off" placeholder="National Holiday / Prof. Absent / etc.">
-        </div>
-        <div style="display:flex;align-items:flex-end">
-          <button class="btn btn-primary" onclick="addHoliday()">Add</button>
-        </div>
+        <div class="fgrp"><label>Date</label><input type="date" id="hDate" min="${start}" max="${end}"></div>
+        <div class="fgrp"><label>Reason</label><input type="text" id="hName" autocomplete="off" placeholder="National Holiday / Prof. Absent"></div>
+        <div style="display:flex;align-items:flex-end"><button class="btn btn-primary" onclick="addHoliday()">Add</button></div>
       </div>
     </div>
-    <div class="sec-title">${sorted.length} entries in ${fyLabel(fy)} (${fyRangeLabel(fy)})</div>
-    ${sorted.length===0
-      ? `<div class="empty">No entries yet.</div>`
-      : `<div class="hol-box">${sorted.map(h=>`
-          <div class="hol-row">
-            <div class="hol-date">${fmtDate(h.date)}</div>
-            <div class="hol-name">${esc(h.name)}</div>
-            <button class="btn-del" onclick="delHoliday('${h.date}')">Remove</button>
-          </div>`).join('')}</div>`}`;
+    <div class="sec-title">${sorted.length} entries — ${fyLabel(fy)} (${fyRangeLabel(fy)})</div>
+    ${sorted.length===0?`<div class="empty">No entries yet.</div>`
+      :`<div class="hol-box">${sorted.map(h=>`
+        <div class="hol-row">
+          <div class="hol-date">${fmtDate(h.date)}</div>
+          <div class="hol-name">${esc(h.name)}</div>
+          <button class="btn-del" onclick="delHoliday('${h.date}')">Remove</button>
+        </div>`).join('')}</div>`}`;
 }
 
-function addHoliday() {
-  const fy = app.currentFY;
-  const date = document.getElementById('hDate').value;
-  const name = document.getElementById('hName').value.trim();
-  if (!date) { toast('Please select a date'); return; }
-  if (!name) { toast('Please enter a reason'); return; }
-  if (app.years[fy].holidays.some(h=>h.date===date)) { toast('Date already exists'); return; }
+function addHoliday(){
+  const fy=app.currentFY, date=document.getElementById('hDate').value, name=document.getElementById('hName').value.trim();
+  if(!date){toast('Please select a date');return}
+  if(!name){toast('Please enter a reason');return}
+  if(app.years[fy].holidays.some(h=>h.date===date)){toast('Date already exists');return}
   app.years[fy].holidays.push({date,name});
-  saveData(); renderHolidays(); renderHome(); toast('Added');
+  saveData();renderHolidays();renderHome();toast('Added');
 }
 
-function delHoliday(date) {
-  const fy = app.currentFY;
-  app.years[fy].holidays = app.years[fy].holidays.filter(h=>h.date!==date);
-  saveData(); renderHolidays(); renderHome(); toast('Removed');
+function delHoliday(date){
+  const fy=app.currentFY;
+  app.years[fy].holidays=app.years[fy].holidays.filter(h=>h.date!==date);
+  saveData();renderHolidays();renderHome();toast('Removed');
 }
 
 // ═══════════════════════════════════════════════════════════════
 // SETTINGS
 // ═══════════════════════════════════════════════════════════════
 function renderSettings() {
-  const fys = Object.keys(app.years).map(Number).sort();
+  if(!app)return;
+  const fys=Object.keys(app.years).map(Number).sort();
+  const fy=app.currentFY, yr=app.years[fy];
 
-  document.getElementById('set-content').innerHTML = `
-    <!-- Year management -->
+  document.getElementById('set-content').innerHTML=`
     <div class="set-sec">
       <h3>Academic Years</h3>
-      ${fys.map(fy => {
-        const yr = app.years[fy];
-        return `<div class="year-row">
-          <div class="year-row-label">${fyLabel(fy)}</div>
-          <div class="year-row-sub">${fyRangeLabel(fy)} · Wed starts: ${yr.wedStartGroup} · Thu starts: ${yr.thuStartGroup}</div>
-          <button class="btn btn-sec btn-sm" onclick="switchFY(${fy});navigate('home')">${app.currentFY===fy?'Viewing':'View'}</button>
-          <button class="btn btn-sm ${yr.archived?'btn-warn':'btn-sec'}" onclick="toggleArchive(${fy})">${yr.archived?'Unarchive':'Archive'}</button>
-          ${fys.length>1?`<button class="btn btn-danger btn-sm" onclick="deleteFY(${fy})">Delete</button>`:''}
+      ${fys.map(f=>{
+        const y=app.years[f];
+        return`<div class="year-row">
+          <div class="year-row-label">${fyLabel(f)}</div>
+          <div class="year-row-sub">${fyRangeLabel(f)} · Wed: ${y.wedStartGroup} · Thu: ${y.thuStartGroup}</div>
+          <button class="btn btn-sec btn-sm" onclick="switchFY(${f});navigate('home')">${app.currentFY===f?'Viewing':'View'}</button>
+          <button class="btn btn-sm ${y.archived?'btn-warn':'btn-sec'}" onclick="toggleArchive(${f})">${y.archived?'Unarchive':'Archive'}</button>
+          ${fys.length>1?`<button class="btn btn-danger btn-sm" onclick="deleteFY(${f})">Delete</button>`:''}
         </div>`;
       }).join('')}
-      <div class="mt16">
-        <button class="btn btn-success" onclick="openNewYear()">+ Add New Academic Year</button>
-      </div>
+      <div class="mt16"><button class="btn btn-success" onclick="openNewYear()">+ Add New Academic Year</button></div>
     </div>
 
-    <!-- Starting groups for current FY -->
     <div class="set-sec">
-      <h3>Starting Groups — ${fyLabel(app.currentFY)}</h3>
+      <h3>Starting Groups — ${fyLabel(fy)}</h3>
       <p style="font-size:12px;color:var(--sub);margin-bottom:12px">Which group meets in the very first week of the academic year.</p>
       <div class="row">
         <div class="fgrp"><label>Wednesday — Week 1</label>
-          <select id="sWed">
-            <option value="Wed1" ${app.years[app.currentFY].wedStartGroup==='Wed1'?'selected':''}>Wed1</option>
-            <option value="Wed2" ${app.years[app.currentFY].wedStartGroup==='Wed2'?'selected':''}>Wed2</option>
-          </select>
-        </div>
+          <select id="sWed"><option value="Wed1" ${yr.wedStartGroup==='Wed1'?'selected':''}>Wed1</option><option value="Wed2" ${yr.wedStartGroup==='Wed2'?'selected':''}>Wed2</option></select></div>
         <div class="fgrp"><label>Thursday — Week 1</label>
-          <select id="sThu">
-            <option value="Thu1" ${app.years[app.currentFY].thuStartGroup==='Thu1'?'selected':''}>Thu1</option>
-            <option value="Thu2" ${app.years[app.currentFY].thuStartGroup==='Thu2'?'selected':''}>Thu2</option>
-          </select>
-        </div>
+          <select id="sThu"><option value="Thu1" ${yr.thuStartGroup==='Thu1'?'selected':''}>Thu1</option><option value="Thu2" ${yr.thuStartGroup==='Thu2'?'selected':''}>Thu2</option></select></div>
       </div>
-      <div class="mt16">
-        <button class="btn btn-primary" onclick="saveStartGroups()">Save</button>
-      </div>
+      <div class="mt16"><button class="btn btn-primary" onclick="saveStartGroups()">Save</button></div>
     </div>
 
-    <!-- Group members editor -->
     <div class="set-sec">
       <h3>Group Members <span style="font-size:12px;font-weight:400;color:var(--sub)">(one name per line)</span></h3>
-      ${['Wed1','Wed2','Thu1','Thu2'].map(g => `
+      ${['Wed1','Wed2','Thu1','Thu2'].map(g=>`
         <div class="grp-edit">
-          <div class="grp-edit-head">
-            ${badge(g)}
-            <span class="grp-edit-label">${g} — ${g.startsWith('W')?'Wednesday':'Thursday'}</span>
-          </div>
-          <div class="fgrp">
-            <textarea id="grp-${g}" rows="5">${(app.groups[g]||[]).map(esc).join('\n')}</textarea>
-          </div>
+          <div class="grp-edit-head">${badge(g)}<span style="font-size:13px;font-weight:700;flex:1;margin-left:4px">${g} — ${g.startsWith('W')?'Wednesday':'Thursday'}</span></div>
+          <div class="fgrp"><textarea id="grp-${g}" rows="5">${(app.groups[g]||[]).map(esc).join('\n')}</textarea></div>
         </div>`).join('')}
       <button class="btn btn-primary mt8" onclick="saveMembers()">Save Members</button>
     </div>
 
-    <!-- Data -->
     <div class="set-sec">
-      <h3>Data</h3>
+      <h3>Data & Sync</h3>
+      <p style="font-size:13px;color:var(--sub);margin-bottom:12px">${isFirebase?'&#9989; Connected to Firebase Realtime Database — all changes sync automatically.':'&#128193; Running in local-only mode — data is stored in this browser only.'}</p>
       <div class="row">
         <button class="btn btn-success" onclick="exportJSON()">Export JSON</button>
         <button class="btn btn-sec" onclick="document.getElementById('importFile').click()">Import JSON</button>
         <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
+        ${isFirebase?`<button class="btn btn-sec" onclick="resetFirebaseConfig()">Change Firebase Config</button>`:'<button class="btn btn-sec" onclick="switchToFirebase()">Connect Firebase</button>'}
       </div>
     </div>
 
@@ -733,128 +852,109 @@ function renderSettings() {
     </div>`;
 }
 
-function saveStartGroups() {
-  const fy = app.currentFY;
-  app.years[fy].wedStartGroup = document.getElementById('sWed').value;
-  app.years[fy].thuStartGroup = document.getElementById('sThu').value;
-  saveData(); toast('Saved'); renderHome();
+function saveStartGroups(){
+  const fy=app.currentFY;
+  app.years[fy].wedStartGroup=document.getElementById('sWed').value;
+  app.years[fy].thuStartGroup=document.getElementById('sThu').value;
+  saveData();toast('Saved');renderHome();
 }
 
-function saveMembers() {
-  ['Wed1','Wed2','Thu1','Thu2'].forEach(g => {
-    const raw = document.getElementById(`grp-${g}`).value;
-    app.groups[g] = raw.split('\n').map(s=>s.trim()).filter(Boolean);
+function saveMembers(){
+  ['Wed1','Wed2','Thu1','Thu2'].forEach(g=>{
+    const raw=document.getElementById(`grp-${g}`).value;
+    app.groups[g]=raw.split('\n').map(s=>s.trim()).filter(Boolean);
   });
-  saveData(); toast('Members saved'); renderHome();
+  saveData();toast('Members saved');renderHome();
 }
 
-function toggleArchive(fy) {
-  app.years[fy].archived = !app.years[fy].archived;
-  saveData(); renderSettings(); renderYearBar(); renderHome();
-  toast(app.years[fy].archived ? `${fyLabel(fy)} archived` : `${fyLabel(fy)} unarchived`);
+function toggleArchive(fy){
+  app.years[fy].archived=!app.years[fy].archived;
+  saveData();renderSettings();renderYearBar();renderHome();
+  toast(app.years[fy].archived?`${fyLabel(fy)} archived`:`${fyLabel(fy)} unarchived`);
 }
 
-function deleteFY(fy) {
-  if (!confirm(`Delete ${fyLabel(fy)} and all its data? This cannot be undone.`)) return;
+function deleteFY(fy){
+  if(!confirm(`Delete ${fyLabel(fy)} and all its data? This cannot be undone.`))return;
   delete app.years[fy];
-  if (app.currentFY === fy) {
-    app.currentFY = Math.max(...Object.keys(app.years).map(Number));
-  }
-  saveData(); renderSettings(); renderYearBar(); renderHome();
-  toast(`${fyLabel(fy)} deleted`);
+  if(app.currentFY===fy)app.currentFY=Math.max(...Object.keys(app.years).map(Number));
+  saveData();renderSettings();renderYearBar();renderHome();
 }
+
+function switchToFirebase(){localStorage.removeItem('lm_local_mode');location.reload()}
 
 // ═══════════════════════════════════════════════════════════════
 // NEW YEAR MODAL
 // ═══════════════════════════════════════════════════════════════
-function openNewYear() {
-  const existing = Object.keys(app.years).map(Number);
-  const maxFY = Math.max(...existing);
-  const suggest = maxFY + 1;
-
-  // FY options: next 3 years not yet created
-  const select = document.getElementById('nyFY');
-  select.innerHTML = '';
-  for (let fy = suggest; fy <= suggest + 3; fy++) {
-    if (!app.years[fy]) {
-      const opt = document.createElement('option');
-      opt.value = fy;
-      opt.textContent = `${fyLabel(fy)}  (${fyRangeLabel(fy)})`;
-      select.appendChild(opt);
+function openNewYear(){
+  const maxFY=Math.max(...Object.keys(app.years).map(Number));
+  const sel=document.getElementById('nyFY');
+  sel.innerHTML='';
+  for(let f=maxFY+1;f<=maxFY+4;f++){
+    if(!app.years[f]){
+      const o=document.createElement('option');
+      o.value=f;o.textContent=`${fyLabel(f)}  (${fyRangeLabel(f)})`;
+      sel.appendChild(o);
     }
   }
-
-  // Auto-detect starting groups from last year
-  const wNext = detectNextStart(maxFY, 3, WED_PAIR);
-  const tNext = detectNextStart(maxFY, 4, THU_PAIR);
-  document.getElementById('nyWed').value = wNext;
-  document.getElementById('nyThu').value = tNext;
-
+  document.getElementById('nyWed').value=detectNext(maxFY,3,WED_PAIR);
+  document.getElementById('nyThu').value=detectNext(maxFY,4,THU_PAIR);
   openModal('newYearModal');
 }
 
-function createYear() {
-  const fy = parseInt(document.getElementById('nyFY').value);
-  if (!fy) { toast('Select a year'); return; }
-  if (app.years[fy]) { toast(`${fyLabel(fy)} already exists`); return; }
-
-  app.years[fy] = {
-    wedStartGroup: document.getElementById('nyWed').value,
-    thuStartGroup: document.getElementById('nyThu').value,
-    holidays: (HOL_DB[fy] || []).map(h => ({...h})),
-    archived: false,
+function createYear(){
+  const fy=parseInt(document.getElementById('nyFY').value);
+  if(!fy){toast('Select a year');return}
+  if(app.years[fy]){toast(`${fyLabel(fy)} already exists`);return}
+  app.years[fy]={
+    wedStartGroup:document.getElementById('nyWed').value,
+    thuStartGroup:document.getElementById('nyThu').value,
+    holidays:(HOL_DB[fy]||[]).map(h=>({...h})),
+    archived:false,
   };
-  app.currentFY = fy;
-  saveData();
-  closeModal('newYearModal');
-  renderYearBar();
-  renderCurrent();
-  renderSettings();
+  app.currentFY=fy;
+  saveData();closeModal('newYearModal');renderYearBar();renderCurrent();renderSettings();
   toast(`${fyLabel(fy)} created`);
 }
 
 // ═══════════════════════════════════════════════════════════════
 // EXPORT / IMPORT
 // ═══════════════════════════════════════════════════════════════
-function exportJSON() {
-  const blob = new Blob([JSON.stringify({version:3, exportedAt:new Date().toISOString(), ...app},null,2)],{type:'application/json'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `meeting-schedule-${toStr(new Date())}.json`;
-  a.click(); URL.revokeObjectURL(a.href);
-  toast('Exported');
+function exportJSON(){
+  const blob=new Blob([JSON.stringify({version:3,exportedAt:new Date().toISOString(),...app},null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`meeting-schedule-${toStr(new Date())}.json`;
+  a.click();URL.revokeObjectURL(a.href);toast('Exported');
 }
 
-function importJSON(e) {
-  const file = e.target.files[0]; if (!file) return;
-  const r = new FileReader();
-  r.onload = ev => {
-    try {
-      const p = JSON.parse(ev.target.result);
-      if (p.groups) app.groups = p.groups;
-      if (p.years)  app.years  = p.years;
-      if (p.currentFY) app.currentFY = p.currentFY;
-      saveData(); renderYearBar(); renderCurrent(); renderSettings();
-      toast('Imported');
-    } catch { toast('Invalid JSON'); }
+function importJSON(e){
+  const file=e.target.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    try{
+      const p=JSON.parse(ev.target.result);
+      if(p.groups)app.groups=p.groups;
+      if(p.years)app.years=p.years;
+      if(p.currentFY)app.currentFY=p.currentFY;
+      saveData();renderYearBar();renderCurrent();renderSettings();toast('Imported');
+    }catch{toast('Invalid JSON')}
   };
-  r.readAsText(file); e.target.value='';
+  r.readAsText(file);e.target.value='';
 }
 
-function resetAll() {
-  if (!confirm('Reset all data to defaults? This cannot be undone.')) return;
-  app = defaultApp(); saveData();
-  renderYearBar(); renderCurrent(); renderSettings();
-  toast('Reset complete');
+function resetAll(){
+  if(!confirm('Reset all data to defaults? This cannot be undone.'))return;
+  app=defaultApp();saveData();renderYearBar();renderCurrent();renderSettings();toast('Reset complete');
 }
 
 // ═══════════════════════════════════════════════════════════════
 // NAVIGATION
 // ═══════════════════════════════════════════════════════════════
-let curPage = 'home';
+let curPage='home';
+const renderers={home:renderHome,schedule:renderSchedule,holidays:renderHolidays,settings:renderSettings};
 
-function navigate(page) {
-  curPage = page;
+function navigate(page){
+  curPage=page;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById(`page-${page}`).classList.add('active');
@@ -862,36 +962,32 @@ function navigate(page) {
   renderCurrent();
 }
 
-function renderCurrent() {
-  const map = { home:renderHome, schedule:renderSchedule, holidays:renderHolidays, settings:renderSettings };
-  map[curPage]();
-}
+function renderCurrent(){if(app)renderers[curPage]()}
 
-document.querySelectorAll('.nav-tab').forEach(t => t.addEventListener('click', ()=>navigate(t.dataset.page)));
+document.querySelectorAll('.nav-tab').forEach(t=>t.addEventListener('click',()=>navigate(t.dataset.page)));
 
 // ═══════════════════════════════════════════════════════════════
 // MODAL
 // ═══════════════════════════════════════════════════════════════
-function openModal(id) { document.getElementById(id).classList.add('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-function overlayClose(e, id) { if (e.target===document.getElementById(id)) closeModal(id); }
-document.addEventListener('keydown', e => { if (e.key==='Escape') document.querySelectorAll('.overlay.open').forEach(el=>el.classList.remove('open')); });
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+function overlayClose(e,id){if(e.target===document.getElementById(id))closeModal(id)}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.overlay.open').forEach(el=>el.classList.remove('open'))});
 
 // ═══════════════════════════════════════════════════════════════
 // TOAST
 // ═══════════════════════════════════════════════════════════════
 let _tt;
-function toast(msg) {
+function toast(msg){
   const el=document.getElementById('toast');
-  el.textContent=msg; el.classList.add('show');
-  clearTimeout(_tt); _tt=setTimeout(()=>el.classList.remove('show'),2400);
+  el.textContent=msg;el.classList.add('show');
+  clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('show'),2400);
 }
 
 // ═══════════════════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════════════════
-renderYearBar();
-renderHome();
+startApp();
 </script>
 </body>
 </html>
