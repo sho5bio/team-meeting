@@ -393,9 +393,25 @@ function defaultApp() {
 }
 
 // ═══════════════════════════════════════════════════════════════
+// FIREBASE CONFIG  ※ここを書き換えないでください
+// ═══════════════════════════════════════════════════════════════
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCrouUOE73u6H3MuyUpBX5wytsQrFE8xKc",
+  authDomain: "aoki-team-meeting.firebaseapp.com",
+  databaseURL: "https://aoki-team-meeting-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "aoki-team-meeting",
+  storageBucket: "aoki-team-meeting.firebasestorage.app",
+  messagingSenderId: "929353179096",
+  appId: "1:929353179096:web:cc4bb6aff06932bf389cad"
+};
+
+// ═══════════════════════════════════════════════════════════════
 // FIREBASE INIT
 // ═══════════════════════════════════════════════════════════════
 function loadSavedConfig() {
+  // 1. Use hardcoded config if set
+  if (FIREBASE_CONFIG.apiKey) return FIREBASE_CONFIG;
+  // 2. Fallback: localStorage (for manual setup)
   try { return JSON.parse(localStorage.getItem(LOCAL_CONFIG_KEY)); } catch { return null; }
 }
 
